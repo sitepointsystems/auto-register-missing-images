@@ -1,0 +1,44 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Auto Register Missing Images 1.1.0\n"
+"POT-Creation-Date: 2025-09-16 00:00+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Domain: auto-register-missing-images\n"
+
+#: auto-register-missing-images.php:60
+msgid "Open Media Library"
+msgstr ""
+
+#: auto-register-missing-images.php:78
+msgid "Auto-scan (current month)"
+msgstr ""
+
+#: auto-register-missing-images.php:87
+msgid "Scan Missing Images"
+msgstr ""
+
+#: auto-register-missing-images.php:90
+msgid "Scan current month for unregistered images"
+msgstr ""
+
+#: auto-register-missing-images.php:96
+msgid "Deep Scan (all uploads)"
+msgstr ""
+
+#: auto-register-missing-images.php:99
+msgid "Recursively scan all subfolders in uploads"
+msgstr ""
+
+#: auto-register-missing-images.php:112
+msgid "Manual Deep Scan (all uploads)"
+msgstr ""
+
+#: auto-register-missing-images.php:115
+msgid "Manual Scan (current month)"
+msgstr ""
+
+#: auto-register-missing-images.php:128
+msgid "%1$s: scanned %2$d file(s), imported %3$d, skipped-existing %4$d, skipped-intermediate %5$d, errors %6$d."
+msgstr ""
