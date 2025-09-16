@@ -1,18 +1,17 @@
 <?php
-/**
- * Plugin Name: Auto Register Missing Images
- * Plugin URI:  https://wordpress.org/plugins/auto-register-missing-images/
- * Description: Auto-register manually uploaded images (in wp-content/uploads) into the Media Library. Scans when you open the Media Library, plus a one-click “Scan Missing Images” button (and an optional Deep Scan for all uploads).
- * Version:     1.1.0
- * Author:      Lennart Øster
- * Author URI:  https://lennartoester.com
- * License:     GPLv2 or later
- * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: auto-register-missing-images
- * Domain Path: /languages
- * Requires at least: 5.2
- * Requires PHP: 7.4
- */
+/*
+Plugin Name: Auto Register Missing Images
+Plugin URI: https://wordpress.org/plugins/auto-register-missing-images/
+Description: Auto-register manually uploaded images in wp-content/uploads into the Media Library.
+Version: 1.1.0
+Author: Lennart Øster
+Requires at least: 5.2
+Requires PHP: 7.4
+Text Domain: auto-register-missing-images
+Domain Path: /languages
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+*/
 
 if (!defined('ABSPATH')) { exit; }
 
@@ -20,7 +19,7 @@ if (!defined('ARM_MI_VERSION')) {
     define('ARM_MI_VERSION', '1.1.0');
 }
 if (!defined('ARM_MI_TEXTDOMAIN')) {
-    define('ARM_MI_TEXTDOMAIN', 'auto-register-missing-images');
+    define('ARM_MI_TEXTDOMAIN', 'auto-register-missing-images'); // kept for internal use if needed
 }
 
 class ARM_Auto_Register_Missing_Images {
@@ -28,8 +27,8 @@ class ARM_Auto_Register_Missing_Images {
     private $exts = ['jpg','jpeg','png','gif','webp','bmp','tif','tiff'];
 
     public function __construct() {
-        // i18n
-        add_action('plugins_loaded', [$this, 'load_textdomain']);
+        // (Removed) i18n loader: WP.org auto-loads translations for the plugin slug since WP 4.6.
+        // add_action('plugins_loaded', [$this, 'load_textdomain']);
 
         // Auto-run when entering Media Library (upload.php)
         add_action('load-upload.php', [$this, 'auto_scan_on_media_screen']);
@@ -45,14 +44,14 @@ class ARM_Auto_Register_Missing_Images {
         add_filter('plugin_action_links_' . plugin_basename(__FILE__), [$this, 'action_links']);
     }
 
-    public function load_textdomain() {
-        load_plugin_textdomain(ARM_MI_TEXTDOMAIN, false, dirname(plugin_basename(__FILE__)) . '/languages/');
-    }
+    // public function load_textdomain() {
+    //     // Not needed for WP.org-hosted plugins.
+    // }
 
     /** Add link to Media Library in the plugin row */
     public function action_links($links) {
         $url = admin_url('upload.php');
-        $links[] = '<a href="' . esc_url($url) . '">' . esc_html__('Open Media Library', ARM_MI_TEXTDOMAIN) . '</a>';
+        $links[] = '<a href="' . esc_url($url) . '">' . esc_html__('Open Media Library', 'auto-register-missing-images') . '</a>';
         return $links;
     }
 
@@ -68,7 +67,7 @@ class ARM_Auto_Register_Missing_Images {
         if (!$enabled) { return; }
 
         $stats = $this->scan_current_month();
-        $this->store_notice($stats, __('Auto-scan (current month)', ARM_MI_TEXTDOMAIN));
+        $this->store_notice($stats, __('Auto-scan (current month)', 'auto-register-missing-images'));
     }
 
     /** Add buttons to the Admin Bar for quick scans */
@@ -84,17 +83,17 @@ class ARM_Auto_Register_Missing_Images {
 
         $wp_admin_bar->add_node([
             'id'    => 'arm-scan',
-            'title' => __('Scan Missing Images', ARM_MI_TEXTDOMAIN),
+            'title' => __('Scan Missing Images', 'auto-register-missing-images'),
             'href'  => add_query_arg(['arm_scan' => 1, '_wpnonce' => $nonce], $upload_url),
-            'meta'  => ['title' => __('Scan current month for unregistered images', ARM_MI_TEXTDOMAIN)]
+            'meta'  => ['title' => __('Scan current month for unregistered images', 'auto-register-missing-images')]
         ]);
 
         $wp_admin_bar->add_node([
             'id'     => 'arm-scan-deep',
             'parent' => 'arm-scan',
-            'title'  => __('Deep Scan (all uploads)', ARM_MI_TEXTDOMAIN),
+            'title'  => __('Deep Scan (all uploads)', 'auto-register-missing-images'),
             'href'   => add_query_arg(['arm_scan' => 'deep', '_wpnonce' => $nonce], $upload_url),
-            'meta'   => ['title' => __('Recursively scan all subfolders in uploads', ARM_MI_TEXTDOMAIN)]
+            'meta'   => ['title' => __('Recursively scan all subfolders in uploads', 'auto-register-missing-images')]
         ]);
     }
 
@@ -107,10 +106,10 @@ class ARM_Auto_Register_Missing_Images {
         $mode = sanitize_text_field($_GET['arm_scan']);
         if ($mode === 'deep') {
             $stats = $this->scan_all_uploads();
-            $this->store_notice($stats, __('Manual Deep Scan (all uploads)', ARM_MI_TEXTDOMAIN));
+            $this->store_notice($stats, __('Manual Deep Scan (all uploads)', 'auto-register-missing-images'));
         } else {
             $stats = $this->scan_current_month();
-            $this->store_notice($stats, __('Manual Scan (current month)', ARM_MI_TEXTDOMAIN));
+            $this->store_notice($stats, __('Manual Scan (current month)', 'auto-register-missing-images'));
         }
 
         // Redirect to clean the URL
@@ -128,7 +127,7 @@ class ARM_Auto_Register_Missing_Images {
 
         $msg = sprintf(
             /* translators: 1: label 2: scanned 3: imported 4: skipped existing 5: skipped intermediate 6: errors */
-            __('%1$s: scanned %2$d file(s), imported %3$d, skipped-existing %4$d, skipped-intermediate %5$d, errors %6$d.', ARM_MI_TEXTDOMAIN),
+            __('%1$s: scanned %2$d file(s), imported %3$d, skipped-existing %4$d, skipped-intermediate %5$d, errors %6$d.', 'auto-register-missing-images'),
             $notice['label'],
             $notice['stats']['scanned'],
             $notice['stats']['imported'],
