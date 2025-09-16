@@ -1,4 +1,4 @@
-=== Auto Register Missing Images ===
+## Auto Register Missing Images
 Contributors: sitepointsystems
 Tags: media library, uploads, images, sync, register, import
 Requires at least: 5.2
